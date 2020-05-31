@@ -1,0 +1,8 @@
+html,body,#app{
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    /*https://www.pexels.com/zh-cn/photo/558478/*/
+    background: url("../images/back.jpeg") no-repeat ;
+    background-size: 100% 100%;
+}
