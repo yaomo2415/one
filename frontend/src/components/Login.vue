@@ -37,8 +37,8 @@ export default {
   data: function () {
     return {
       login_form: {
-        username: '',
-        password: ''
+        username: '123123',
+        password: '123123'
       },
       login_form_rules: {
         username: [
@@ -76,12 +76,23 @@ export default {
       this.$refs.login_form_ref.resetFields()
     },
     login: function () {
-      if (this.login_form.username === '') {
-        // validate参数为回调函数，
-        this.$refs.login_form_ref.validate((valid) => {
-          console.log(valid)
-        })
-      }
+      console.log(this)
+      // validate参数为回调函数，
+      this.$refs.login_form_ref.validate(async (valid) => {
+        if (!valid) return
+        try {
+          const result = await this.$http.post('/login/', this.login_form)
+          // 将返回的token保存至sessionStorage中
+          // sessionStorage,会话期间有效
+          window.sessionStorage.setItem('token', result.data.token)
+          // 编程式导航跳转至首页
+          await this.$router.push('/home')
+          this.$message.success('登录成功')
+        } catch (e) {
+          console.log(e)
+          this.$message.error('登录失败：账户名或密码错误！')
+        }
+      })
     }
   }
 }
@@ -89,80 +100,80 @@ export default {
 
 <!--利用vue脚手架 添加开发依赖 less-loader和less-->
 <style lang="less" scoped>
-.login_container {
-  height: 100%;
-}
-
-.slogan {
-  position: absolute;
-  left: 15%;
-  top: 50%;
-  transform: translate(0, -50%);
-  width: 500px;
-  height: 385px;
-  color: #fff;
-  cursor: default;
-
-  h1 {
-    font-size: 40px;
-    font-family: 'font-title';
+  .login_container {
+    height: 100%;
   }
-}
 
-.login_box {
-  position: absolute;
-  right: 15%;
-  top: 50%;
-  /*配合position实现居中*/
-  transform: translate(0, -50%);
-  width: 400px;
-  height: 385px;
-  background-color: #fff;
-  border-radius: 4px;
+  .slogan {
+    position: absolute;
+    left: 15%;
+    top: 50%;
+    transform: translate(0, -50%);
+    width: 500px;
+    height: 385px;
+    color: #fff;
+    cursor: default;
 
-  .el-form {
-    /*padding-top: 30px;*/
-
-    span {
-      font-size: 30px;
-      color: #3B3B3B;
-    }
-
-    a {
-      text-decoration: none;
-      color: #00C4B4;
-    }
-
-    a:hover {
-      color: #03DAC5;
-    }
-
-    .a_forget {
-      padding-right: 150px;
-      padding-left: 10px;
+    h1 {
+      font-size: 40px;
+      font-family: 'font-title';
     }
   }
 
-  .form_item {
-    padding-top: 30px;
-    padding-right: 20px;
-    padding-left: 20px;
-  }
+  .login_box {
+    position: absolute;
+    right: 15%;
+    top: 50%;
+    /*配合position实现居中*/
+    transform: translate(0, -50%);
+    width: 400px;
+    height: 385px;
+    background-color: #fff;
+    border-radius: 4px;
 
-  .btns {
-    display: flex;
-    justify-content: flex-end;
+    .el-form {
+      /*padding-top: 30px;*/
 
-    .success_button {
-      background-color: #00C4B4;
-      border: 1px solid #00C4B4;
+      span {
+        font-size: 30px;
+        color: #3B3B3B;
+      }
+
+      a {
+        text-decoration: none;
+        color: #00C4B4;
+      }
+
+      a:hover {
+        color: #03DAC5;
+      }
+
+      .a_forget {
+        padding-right: 150px;
+        padding-left: 10px;
+      }
     }
 
-    .success_button:hover {
-      background-color: #03DAC5;
-      border: 1px solid #03DAC5;
+    .form_item {
+      padding-top: 30px;
+      padding-right: 20px;
+      padding-left: 20px;
+    }
+
+    .btns {
+      display: flex;
+      justify-content: flex-end;
+
+      .success_button {
+        background-color: #00C4B4;
+        border: 1px solid #00C4B4;
+      }
+
+      .success_button:hover {
+        background-color: #03DAC5;
+        border: 1px solid #03DAC5;
+      }
     }
   }
-}
 
 </style>

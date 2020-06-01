@@ -8,6 +8,13 @@ import './assets/fonts/iconfont.css'
 import './assets/css/global.css'
 // 导入字体
 import './assets/fonts/font-slogan.css'
+
+// 导入axios
+import axios from 'axios'
+// 设置默认url
+axios.defaults.baseURL = 'http://127.0.0.1:2415/api/v1'
+// 将axios挂在到Vue的原型对象上
+Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 new Vue({
